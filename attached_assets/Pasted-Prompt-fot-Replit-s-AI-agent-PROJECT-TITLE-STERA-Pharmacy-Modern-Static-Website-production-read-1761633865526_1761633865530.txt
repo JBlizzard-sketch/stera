@@ -1,0 +1,346 @@
+Prompt fot Replit’s AI agent
+PROJECT TITLE: STERA Pharmacy — Modern Static Website (production-ready)
+ UPLOAD: I will upload the STERA logo file (logo.png) to /public/logo.png. Use it everywhere the logo is required and infer the color palette from it, but also use the explicit hex colors below for consistency.
+
+1) Project summary & goal
+Build a premium, static, production-ready website for STERA Pharmacy. It must be:
+Built with the latest best-practice 2025 frontend stack
+
+
+Fully static (no backend), pre-rendered, and deployable on Vercel or Netlify immediately
+
+
+Clean, modern, accessible, SEO-optimized, and fast (Lighthouse 90+ target)
+
+
+Architected so a future agent can add a CMS or dynamic features without reworking the code
+
+
+
+2) Exact tech stack & config requirements
+Framework: Next.js 15 (App Router). Use output: 'export' for static export.
+
+
+Language: TypeScript.
+
+
+Styling: TailwindCSS (latest). Provide tailwind.config.ts and globals.css.
+
+
+UI primitives: shadcn/ui for components.
+
+
+Animations: Framer Motion (subtle).
+
+
+Icons: Lucide React.
+
+
+Images: next/image for optimization and automatic lazy-loading. All images must be referenced by external URLs (Unsplash/Pexels/other CDNs) — do NOT place full-size images into repo.
+
+
+Lint & Format: ESLint + Prettier configured.
+
+
+Scripts: Provide dev, build, and start scripts; build should run next build && next export and output site to /out for static hosting.
+
+
+next.config.mjs: configure output: 'export' and images.domains for the chosen external CDNs.
+
+
+
+3) Colors, fonts, and Tailwind theme (include exactly)
+Use these values. Add to tailwind.config.ts:
+import type { Config } from "tailwindcss";
+const config: Config = {
+  content: ["./app/**/*.{ts,tsx,mdx}", "./components/**/*.{ts,tsx,mdx}"],
+  theme: {
+    extend: {
+      colors: {
+        steraGold: "#F5B11A",
+        steraWhite: "#FFFFFF",
+        steraGray: "#A9A9A9",
+        steraBgDark: "#2E2E2E",
+        steraBgLight: "#F2F2F2",
+      },
+      fontFamily: {
+        sans: ["Poppins", "sans-serif"],
+      },
+      backgroundImage: {
+        "stera-gradient": "linear-gradient(135deg, #2E2E2E, #F2F2F2)",
+      },
+      boxShadow: {
+        glow: "0 0 10px rgba(245, 177, 26, 0.18)",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
+
+Add @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap'); to globals.css.
+
+
+
+4) Exact folder + file skeleton (create these files)
+/app
+  /layout.tsx
+  /head.tsx
+  /page.tsx
+  /about/page.tsx
+  /products/page.tsx
+  /services/page.tsx
+  /blog/page.tsx
+  /blog/[slug]/page.mdx
+  /contact/page.tsx
+/components
+  Navbar.tsx
+  Footer.tsx
+  Button.tsx
+  Card.tsx
+  Hero.tsx
+  ProductGrid.tsx
+  ServiceCard.tsx
+/public/logo.png     ← uploaded by me
+/styles/globals.css
+/tailwind.config.ts
+/next.config.mjs
+/package.json
+/README.md
+
+Each component must be modular, typed with TypeScript, and include a short comment header describing its purpose and the props it accepts.
+
+5) Page specs & UX details (implement fully)
+Home (/)
+Hero: show logo (left), headline, short tagline, two CTAs: “Order on WhatsApp” and “Explore Products”. Use Framer Motion for entrance animation.
+
+
+Feature cards: medicines, supplements, equipment — 3 cards with lazy images and short copy.
+
+
+Blog preview: show 3 posts (image, title, excerpt) linking to /blog/[slug].
+
+
+Contact strip: phone + WhatsApp button and open hours.
+
+
+Products (/products)
+Responsive grid of category cards. Each card: external lazy image URL, category name, 1-line blurb, “Learn more” (links to anchor or future detail). Use Card.tsx.
+
+
+Services (/services)
+Cards for Consultation, Home Delivery, Prescription Management, Vaccination (if applicable). Icons + short descriptions.
+
+
+Blog (/blog)
+Index: paged grid/list of article previews (use MDX files in /blog/[slug]/page.mdx). Provide 3 sample MDX posts with placeholder content and external images.
+
+
+About (/about)
+Mission, values, small “team” block (placeholder image via external URL), trust signals (licensed pharmacist, trust badge).
+
+
+Contact (/contact)
+Address, phone, working hours, WhatsApp link: https://wa.me/254XXXXXXXXX?text=Hello%20STERA%20Pharmacy! (replace Xs later).
+
+
+Embedded responsive Google Maps iframe.
+
+
+Frontend-only contact form: name/email/message with simple client validation and a friendly “This form is static — replace action to connect to a server or form service” comment.
+
+
+
+6) Image handling + stock image instructions (very specific)
+Do NOT store heavy images in the repo. Use external CDN URLs (Unsplash/Pexels/PEXELS/PEXELS-CURATED or other public CDNs).
+
+
+Use the agent’s stock image URL generator (or search API) and insert direct image URLs that match the content (e.g., “pharmacist arranging medication”, “medication blister packs”, “home delivery box”, “customer at counter”). The agent must not synthesize images or place base64 assets in the repo — only links.
+
+
+Add these rules for generated URLs:
+
+
+Prefer Pexels or Unsplash CDN links with high resolution.
+
+
+For each image, add a comment: // NEXT_AGENT_NOTE: Replace with real shop photo hosted on Cloudinary or your CDN.
+
+
+All <Image /> components must include loading="lazy", alt text, and priority={false} except hero small decorative logo.
+
+
+Add next.config.mjs domains for whichever CDNs you choose (e.g., images.unsplash.com, images.pexels.com).
+
+
+Example usage:
+import Image from "next/image";
+<Image
+  src="https://images.pexels.com/photos/3825529/pexels-photo-3825529.jpeg"
+  alt="Pharmacist arranging medication"
+  width={1200}
+  height={800}
+  loading="lazy"
+  className="rounded-xl object-cover shadow-glow"
+
+/>
+// NEXT_AGENT_NOTE: Replace with real store photo hosted on Cloudinary later.
+
+---
+### 7) Accessibility, SEO, and performance tasks (implement)
+- Add `<head>` metadata in `app/head.tsx` (site title, description, OG tags, Twitter card). Use structured schema.org JSON-LD for the business (LocalBusiness) in the layout head.  
+- Create `sitemap.xml` and `robots.txt` in `public/`.  
+- Ensure color contrast by checking text against `steraBgLight`/`steraBgDark`.  
+- Respect prefers-reduced-motion: if user has it enabled, disable Framer Motion animations.  
+ 
+---
+### 8) Animations & UX behavior (implement with care)
+- Subtle Framer Motion fade-in for sections with `whileInView` and reduced motion fallback.  
+- Buttons scale to 1.03 on hover.  
+- Navbar becomes sticky and slightly blurred on scroll.  
+ 
+---
+### 9) Build, scripts, and deployment (provide exact)
+- `package.json` must include:
+  ```json
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start"
+  }
+
+Ensure next.config.mjs contains:
+
+ export default {
+  output: "export",
+  images: {
+    domains: ["images.pexels.com", "images.unsplash.com", "images.pexels.com", "images.pexels.com"],
+  },
+};
+
+
+Confirm that running npm run build produces /out ready for Netlify/Vercel static hosting.
+
+
+Add a short netlify.toml or vercel.json with basic defaults (optional but preferred).
+
+
+
+10) README.md (must include)
+A well-written README covering:
+How to run (npm install, npm run dev)
+
+
+How to build and where output lives (/out)
+
+
+How to replace placeholder images and update the WhatsApp number
+
+
+How to deploy to Vercel and Netlify (one-click instructions)
+
+
+"Next Agent Guide" with bullet points: where to hook a CMS, where to add dynamic API routes, and how to replace dummy images with Cloudinary-hosted ones.
+
+
+
+11) Code comments & NEXT_AGENT_NOTE conventions (critical)
+Throughout the codebase include these exact comment markers where relevant:
+// NEXT_AGENT_NOTE: Replace placeholder content here with real CMS data.
+
+
+// NEXT_AGENT_NOTE: Replace this image URL with the shop photo hosted on your CDN.
+
+
+// NEXT_AGENT_NOTE: To add dynamic product pages, create /app/products/[slug]/page.tsx and connect to a products API or CMS.
+ Also add a top-level NEXT_AGENT_GUIDE.md that maps components to pages and lists decisions to reverse/extend.
+
+
+
+12) Examples & placeholders (include sample content)
+Provide 3 sample product category cards with external images and realistic text.
+
+
+Provide 3 sample blog posts in MDX with images and tags.
+
+
+Use realistic placeholder phone number pattern for Kenya until replaced: +2547XXXXXXXX.
+
+
+
+13) Final QA checklist (implement in repo root as QA.md)
+npm run dev runs without errors.
+
+
+npm run build succeeds and /out contains a static export.
+
+
+Pages are responsive and accessible.
+
+
+Images are lazy-loaded, with external domains allowed.
+
+
+README and NEXT_AGENT_GUIDE.md present and clear.
+
+
+
+14) Permissions & licensing
+Only use public domain or appropriately licensed stock images for placeholders (Unsplash/Pexels). Add an ASSETS.md listing the used image URLs and credits.
+
+
+
+15) Delivery & final output
+Deliver a git repo in the Replit workspace with the full file tree, all code, and the generated out folder after npm run build.
+
+
+In the final message, give the user ONE-LINE deployment instructions for Vercel and Netlify and list files that require manual edits (image URLs, WhatsApp number, and contact email).
+
+
+
+16) Brand Mood Guide (apply across design)
+Tone: Trustworthy, helpful, calm. Use warm gold accents for CTAs and neutral grays for copy.
+
+
+Headline hierarchy: H1 large (48px on desktop, 28px mobile), H2 medium (32/22), body 16px. Use font-weight: 600 for headings.
+
+
+Buttons: Primary button: bg-steraGold text-white rounded-lg py-2 px-4 shadow-glow; Secondary: border-steraGray text-steraGray.
+
+
+Spacing rules: base spacing = 16px. Use multiples (16, 24, 32, 48).
+
+
+Imagery style: bright, clean clinical photography (no heavy filters). Use images showing: pharmacist at counter, product close-ups, delivery person, patient consultation.
+
+
+Iconography: simple line icons (Lucide), size ~20–24px.
+
+
+
+17) Handover summary for next agent (must be included in README)
+Provide a final section in the README titled “Next Agent / Developer Handoff” listing:
+What was scaffolded (file map).
+
+
+Where to replace images (file paths and the ASSETS.md file).
+
+
+Where to update the WhatsApp number.
+
+
+How to add a CMS (suggest Sanity/Contentful + where to fetch data in app/products and app/blog).
+
+
+How to convert static contact form to a serverless function or a 3rd party form service (Netlify Forms / Formspree).
+
+
+
+IMPORTANT: Stock image instruction (one more time, explicit)
+Use the Replit agent’s stock-image URL tool (if available) to search and provide direct CDN URLs that will display in production. Do not create or embed raster assets in the repo. For each stock URL chosen add a comment with credit and a // NEXT_AGENT_NOTE telling the next agent how to swap it for real photos.
+
+Final note
+Deliver a complete static site that looks production-ready and polished, with clearly annotated placeholders and handoff instructions so a future agent or developer can pick up and add CMS, e-commerce, or ordering logic with minimal friction.
+End of prompt.
+
+

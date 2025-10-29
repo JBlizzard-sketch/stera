@@ -1,0 +1,5 @@
+# NEXT_AGENT_NOTE: Update this file with your production domain when deploying
+User-agent: *
+Allow: /
+
+Sitemap: https://stera-pharmacy.example.com/sitemap.xml
